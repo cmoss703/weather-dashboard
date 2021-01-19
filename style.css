@@ -1,0 +1,28 @@
+#city-bar {
+    background-color: rgb(218, 218, 218);
+    padding-top: 30px;
+    height: 800px;
+}
+
+#dashboard {
+    padding-top: 30px;
+    left: 30px
+}
+
+#whats-weather {
+    text-align: center;
+    margin: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.row {
+    padding-left: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+#current-day {
+    text-align: center;
+}
