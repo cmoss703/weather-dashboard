@@ -8,68 +8,85 @@ $(document).ready(function () {
         currentTime();
     }, 1000);
 
+    var city;
+    var lat;
+    var lon;
+
+
     // var citySearch = $(search-city).val()
     //     searchBtn = $(search-btn);
 
-    $("#another-btn").on("click", function (event) {
+    $("#search-btn").on("click", function (event) {
 
         event.preventDefault();
 
-
-
-        var city = $("#search-city").val()
-        APIkey = "9a01a6d9d70a31597772c3b431a80849"
-        queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
+        city = $("#search-city").val();
+        const APIkey = "9a01a6d9d70a31597772c3b431a80849"
+        queryURL1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
 
         console.log(city);
-        console.log(queryURL);
+        console.log(queryURL1);
 
         $.ajax({
-            url: queryURL,
+            url: queryURL1,
             method: "GET"
         }).then(function (response) {
-            console.log(response)
-            // $("#dashboard").appendchild(response)
+            console.log(response);
+
+            const pToday = moment().format('L')
+            hCity = $("<h3>").text(response.name + " (" + pToday + ")")
+            tempF = (response.main.temp - 273.15) * 1.80 + 32
+            pTemp = $("<p>").text("Temperature: " + tempF.toFixed(0) + " \u00B0F")
+            pHumid = $("<p>").text("Humidity: " + response.main.humidity + " %")
+            pWind = $("<p>").text("Wind Speed: " + response.wind.speed + " MPH");
+
+            $("#dashboard").append(hCity, pTemp, pHumid, pWind);
+            $("#city-bar").append(city);
+
+            lat = response.coord.lat;
+            lon = response.coord.lon;
+
+            localStorage.setItem("City " + city, city)
+
+            localStorage.setItem("lat " + city, lat);
+            localStorage.setItem("lon " + city, lon);
+
+            getUVdaily();
+
+        });
+
+        function getUVdaily() {
+        
+        lat = localStorage.getItem("lat " + city);
+        lon = localStorage.getItem("lon " + city);
+        console.log("Lat = " + lat + " & Lon = " + lon);
+
+        queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey;
+
+        console.log(city);
+        console.log(queryURL2);
+
+        $.ajax({
+            url: queryURL2,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response);
+
+            const pUV = $("<p>").text("UV Index: " + response.current.uvi)
+            fiveDay = response.daily;
+
+
+            $("#dashboard").append(pUV);
+
         })
-    })
-
-    // $("#another-btn").on("click"), function (event) {
+    }
 
 
-    //     event.preventDefault();
+    });
+
+    // figure out how to add icons to forecast
+    // save recent cities to local storage and call them when page reloads
 
 
-    //     console.log("clicked");
-
-
-    // };
-
-    // $("#find-movie").on("click", function(event) {
-
-    //     // event.preventDefault() can be used to prevent an event's default behavior.
-    //     // Here, it prevents the submit button from trying to submit a form when clicked
-    //     event.preventDefault();
-
-    //     // Here we grab the text from the input box
-    //     var movie = $("#movie-input").val();
-
-    //     // Here we construct our URL
-    //     var queryURL = "https://www.omdbapi.com/?t=" + movie + "&apikey=trilogy";
-
-    //     // Write code between the dashes below to hit the queryURL with $ajax, then take the response data
-    //     // and display it in the div with an id of movie-view
-
-    //     // ------YOUR CODE GOES IN THESE DASHES. DO NOT MANUALLY EDIT THE HTML ABOVE.
-
-    //     $.ajax({
-    //       url: queryURL,
-    //       method: "GET"
-    //     }).then(function(response) {
-    //       $("#movie-view").text(JSON.stringify(response));
-    //     });
-
-    //     // -----------------------------------------------------------------------
-
-    //   });
 
 })

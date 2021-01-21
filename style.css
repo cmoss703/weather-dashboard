@@ -26,3 +26,10 @@
 #search-btn {
     padding: 4px;
 }
+
+header {
+    background-color: black;
+    color: cornsilk;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

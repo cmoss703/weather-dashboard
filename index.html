@@ -8,40 +8,36 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>Weather App</title>
 </head>
 
 <body>
 
     <div class="container">
-        <div class="row">
-            <h1 class="col-sm-12" id="whats-weather">What's the weather like today?</h1>
-        </div>
-        <div class="row">
-            <h2 class="col-sm-12 center" id="current-day">Time</h2>
-        </div>
-        <div class="row">
+        <header>
+            <h1 class="col-sm-12" id="whats-weather">Do you want to know about the weather?</h1>
+            <h2 class="col-sm-12 center" id="current-day"></h2>
+        </header>
+        <div class="row main-grid">
             <div class="col-sm-3" id="city-bar">
-                <h3>Search for a City:</h3>
-                <!-- <div> -->
-                    <!-- <form id="city-form">
-                        <input type="text" id="city-search">
-                        <input type="submit" id="search-btn" value="Search">
-                    </form> -->
+                <div class="row">
+                    <h3>Search for a City:</h3>
+
                     <input type="text" placeholder="Enter your city.." id="search-city">
-                    <button id="another-btn" class="btn btn-primary fas fa-search"></button>
-                <!-- </div> -->
+                    <button id="search-btn" class="btn btn-primary fas fa-search"></button>
+                </div>
+                <div id="row saved-cities"></div>
             </div>
             <div class="col-sm-9" id="dashboard">
-                <div class="row">
-
+                <div class="row" id="weather-details">
+                    <!-- <h3 id="city"></h3> -->
                 </div>
-                <div class="row weather-details"></div>
                 <div class="row 5-day"></div>
+
             </div>
         </div>
     </div>
-  
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="script.js"></script>
