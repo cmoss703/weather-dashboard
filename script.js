@@ -11,17 +11,29 @@ $(document).ready(function () {
     var city;
     var lat;
     var lon;
+    const APIkey = "9a01a6d9d70a31597772c3b431a80849"
 
+    // var lastSearch = localStorage.getItem("lastCity");
 
-    // var citySearch = $(search-city).val()
-    //     searchBtn = $(search-btn);
+    // function savedCities() {
 
-    $("#search-btn").on("click", function (event) {
+    //     for (i = 0; i>)
+    // };
 
-        event.preventDefault();
+    // savedCities();
+
+    $("#search-btn").on("click", function () {
+
+        getWeatherdata();
+
+    });
+
+    function getWeatherdata() {
+
+        // event.preventDefault();
 
         city = $("#search-city").val();
-        const APIkey = "9a01a6d9d70a31597772c3b431a80849"
+
         queryURL1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
 
         console.log(city);
@@ -34,13 +46,14 @@ $(document).ready(function () {
             console.log(response);
 
             const pToday = moment().format('L')
+            weatherIcon = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
             hCity = $("<h3>").text(response.name + " (" + pToday + ")")
             tempF = (response.main.temp - 273.15) * 1.80 + 32
             pTemp = $("<p>").text("Temperature: " + tempF.toFixed(0) + " \u00B0F")
             pHumid = $("<p>").text("Humidity: " + response.main.humidity + " %")
             pWind = $("<p>").text("Wind Speed: " + response.wind.speed + " MPH");
 
-            $("#dashboard").append(hCity, pTemp, pHumid, pWind);
+            $("#dashboard").append(hCity, weatherIcon, pTemp, pHumid, pWind);
             $("#city-bar").append(city);
 
             lat = response.coord.lat;
@@ -48,17 +61,21 @@ $(document).ready(function () {
 
             localStorage.setItem("City " + city, city)
 
-            localStorage.setItem("lat " + city, lat);
-            localStorage.setItem("lon " + city, lon);
+            // localStorage.setItem("lat " + city, lat);
+            // localStorage.setItem("lon " + city, lon);
 
-            getUVdaily();
+            getUVdaily(lat, lon);
 
         });
 
-        function getUVdaily() {
-        
-        lat = localStorage.getItem("lat " + city);
-        lon = localStorage.getItem("lon " + city);
+    };
+
+    function getUVdaily(lat, lon) {
+
+        // event.preventDefault();
+
+        // lat = localStorage.getItem("lat " + city);
+        // lon = localStorage.getItem("lon " + city);
         console.log("Lat = " + lat + " & Lon = " + lon);
 
         queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey;
@@ -70,19 +87,42 @@ $(document).ready(function () {
             url: queryURL2,
             method: "GET"
         }).then(function (response) {
+
             console.log(response);
 
-            const pUV = $("<p>").text("UV Index: " + response.current.uvi)
-            fiveDay = response.daily;
+            const uvIndex = response.current.uvi
 
+            const pUV = $("<p>").text("UV Index: " + uvIndex)
+            fiveDay = response.daily
 
             $("#dashboard").append(pUV);
 
-        })
-    }
+            for (var i = 0; i < 5; i++) {
+
+                const dayColumn = $("<div>").addClass("col-md-2")
+                    dayCard = $("<div>").addClass("card")
+                    dayCardbody = $("<div>").addClass("card-body").html(response.daily[i])
+                    date = $("<p>").text(moment().add(i+1, 'days').format('L'));
+
+                dayColumn.append(dayCard.append(dayCardbody.append(date)));
+                $(".5-day").append(dayColumn);
+            
+            };
+
+            // if (uvIndex < 4) {
+            //     pUV.addClass("favUV")
+            // } else if (uvIndex > 5) {
+            //     pUV.addClass("unfavUV")
+            // } else {
+            //     pUV.addClass(modUV)
+            // };
 
 
-    });
+        });
+
+    };
+
+
 
     // figure out how to add icons to forecast
     // save recent cities to local storage and call them when page reloads

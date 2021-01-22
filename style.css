@@ -1,12 +1,13 @@
 #city-bar {
     background-color: rgb(218, 218, 218);
     padding-top: 30px;
-    height: 800px;
+    height: 600px;
+    border: rgb(218, 218, 218);
 }
 
 #dashboard {
     padding-top: 30px;
-    left: 30px
+    left: 20px
 }
 
 #whats-weather {
@@ -27,9 +28,29 @@
     padding: 4px;
 }
 
+#search-city {
+    width: 130px;
+}
+
+h3 {
+    font-size: large;
+}
+
 header {
     background-color: black;
     color: cornsilk;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.favUV {
+    background-color: green;
+}
+
+.unfavUV {
+    background-color: red;
+}
+
+.modUV {
+    background-color: yellow;
 }
