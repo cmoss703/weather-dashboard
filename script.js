@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     function currentTime() {
-        $('#current-day').html(moment().format('llll'));
+        $('#current-day').html(moment().format('llll') + " CST");
     };
     currentTime();
     setInterval(function () {
@@ -59,7 +59,7 @@ $(document).ready(function () {
 
             const pToday = moment().format('L')
             weatherIcon = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
-            hCity = $("<h3>").text(response.name + " (" + pToday + ")")
+            hCity = $("<h2>").text(response.name + " (" + pToday + ")")
             tempF = (response.main.temp - 273.15) * 1.80 + 32
             pTemp = $("<p>").text("Temperature: " + tempF.toFixed(0) + " \u00B0F")
             pHumid = $("<p>").text("Humidity: " + response.main.humidity + " %")
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
             $("#dashboard").append(hCity, weatherIcon, pTemp, pHumid, pWind);
 
-            var cityButton = $("<button>").text(city);
+            var cityButton = $("<button>").text(city).addClass("city-button");
             $("#buttons").append(cityButton);
 
             lat = response.coord.lat;
@@ -103,8 +103,10 @@ $(document).ready(function () {
 
             const pUV = $("<p>").text("UV Index: " + uvIndex)
             fiveDay = response.daily
+            forecastText = $("<h3>").text("5-Day Weather Forecast:")
 
             $("#dashboard").append(pUV);
+            $("#dashboard").append(forecastText);
 
             for (var i = 0; i < 5; i++) {
 
@@ -137,5 +139,6 @@ $(document).ready(function () {
 
     // figure out how to colorize only the UV index number
     // save recent cities to local storage and call them when page reloads
+    // show error message if city isnt found
 
 })

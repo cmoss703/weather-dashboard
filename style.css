@@ -60,3 +60,8 @@ header {
     background-color: rgb(0, 132, 255);
     color: cornsilk;
 }
+
+.city-button {
+    background-color: whitesmoke;
+    width: 130px;
+}
