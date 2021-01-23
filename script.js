@@ -14,12 +14,14 @@ $(document).ready(function () {
     var lon;
     const APIkey = "9a01a6d9d70a31597772c3b431a80849"
 
-    if (localStorage.length !== 0) { 
-    
-    getLast(city);
+    // If the user has searched for a city in the past, the information is taken from local storage and filled into the weather data function.
+
+    if (localStorage.length !== 0) {
+
+        getLast(city);
 
     };
-    
+
     function getLast(city) {
 
         var lastSearch = localStorage.getItem("last-city");
@@ -29,6 +31,8 @@ $(document).ready(function () {
         getWeatherdata(city)
 
     };
+
+    // If the user has any stored cities, they will appear as buttons to the side of the page, under the search bar.
 
     function cityButtons() {
 
@@ -48,28 +52,29 @@ $(document).ready(function () {
 
     cityButtons();
 
+    // When a city button is clicked, that city is used in the weather data functions.
+
     $(".city-button").on("click", function () {
 
         city = $(this).text();
 
         console.log("clicked " + city);
 
-        // $("#dashboard").html('');
-        // $("#5-day").html('');
-
         getWeatherdata(city)
     });
+
+    // when a user enters a new city, it is entered into the weather data function
 
     $("#search-btn").on("click", function () {
 
         city = $("#search-city").val();
 
-        // $("#dashboard").html('');
-        // $("#5-day").html('');
-
         getWeatherdata(city);
 
     });
+
+    // this is the weather data function. It will clear any data that is currently in the dashboard and use an AJAX call to get weather from
+    // the open weather map API. 
 
     function getWeatherdata(city) {
 
@@ -87,6 +92,8 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response);
 
+            // most of the elements are created dynamically here, within the ajax function, and appended to the dashboard.
+
             const pToday = moment().format('L')
             weatherIcon = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
             hCity = $("<h2>").text(response.name + " (" + pToday + ")")
@@ -97,10 +104,16 @@ $(document).ready(function () {
 
             $("#dashboard").append(hCity, weatherIcon, pTemp, pHumid, pWind);
 
+            // the latitude and longitude coordinates are noted and stored for use later in the UV index and forecast function.
+
             lat = response.coord.lat;
             lon = response.coord.lon;
 
+            // the last searched city will be stored and used when the user reloads the page. see above getLast(city) function.
+
             localStorage.setItem("last-city", city);
+
+            // The city is also stored as a button to the side when it is searched, if it does not already exist.
 
             if ((localStorage.getItem(cityNum - 1) !== city) && (localStorage.getItem(cityNum - 2) !== city) && (localStorage.getItem(cityNum - 3) !== city)) {
 
@@ -113,12 +126,20 @@ $(document).ready(function () {
 
             };
 
+            // the UV function is called with latitude and longitude as arguments
+
             getUVdaily(lat, lon);
 
         })
-        .fail(function(error) {alert("Sorry! We couldn't find that city. Please try again.")});
+
+        // If a city does not exist or cannot be found in the API, an error alert is called.
+
+            .fail(function (error) { alert("Sorry! We couldn't find that city. Please try again.") });
 
     };
+
+    // This function is called to get UV data as well as 5 day forecast information. It uses latitude and longitude to identify the API,
+    // instead of city name, so these are taken from the above function.
 
     function getUVdaily(lat, lon) {
 
@@ -144,6 +165,8 @@ $(document).ready(function () {
             $("#dashboard").append(pUV);
             $("#dashboard").append(forecastText);
 
+            // Again, most of the information is created dynamically within the ajax function.
+
             for (var i = 0; i < 5; i++) {
 
                 const dayColumn = $("<div>").addClass("col-md-2")
@@ -160,6 +183,8 @@ $(document).ready(function () {
 
             };
 
+            // The UV index is colorized based on favorable, unfavorable, or moderate conditions.
+
             if (uvIndex < 4) {
                 pUV.addClass("favUV")
             } else if (uvIndex > 5) {
@@ -172,9 +197,5 @@ $(document).ready(function () {
         });
 
     };
-
-    // figure out how to colorize only the UV index number
-    // save recent cities to local storage and call them when page reloads
-    // show error message if city isnt found
 
 })
