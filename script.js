@@ -150,7 +150,7 @@ $(document).ready(function () {
                 dayCard = $("<div>").addClass("card day-col")
                 dayCardbody = $("<div>").addClass("card-body").html(response.daily[i])
                 date = $("<p>").text(moment().add(i + 1, 'days').format('l'))
-                iconDaily = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png")
+                iconDaily = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png")
                 tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32
                 tempDaily = $("<p>").text("Temp: " + tempF.toFixed(0) + "\u00B0F")
                 humidDay = $("<p>").text("Humidity: " + response.daily[i].humidity + "%")
