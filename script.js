@@ -9,11 +9,17 @@ $(document).ready(function () {
     }, 1000);
 
     var city;
-    var cityNum = 0;
+    var cityNum = localStorage.length;
     var lat;
     var lon;
     const APIkey = "9a01a6d9d70a31597772c3b431a80849"
 
+    if (localStorage.length !== 0) { 
+    
+    getLast(city);
+
+    };
+    
     function getLast(city) {
 
         var lastSearch = localStorage.getItem("last-city");
@@ -24,27 +30,51 @@ $(document).ready(function () {
 
     };
 
-    getLast(city);
+    function cityButtons() {
 
-    // function savedCities() {
+        for (var j = 0; j < localStorage.length; j++) {
 
-    //     for (i = 0; i>)
-    // };
+            var prevCity = localStorage.getItem(j);
 
-    // savedCities();
+            if (prevCity !== null) {
+
+                var cityButton = $("<button>").text(prevCity).addClass("city-button");
+                $("#buttons").append(cityButton);
+
+            }
+
+        }
+    };
+
+    cityButtons();
+
+    $(".city-button").on("click", function () {
+
+        city = $(this).text();
+
+        console.log("clicked " + city);
+
+        // $("#dashboard").html('');
+        // $("#5-day").html('');
+
+        getWeatherdata(city)
+    });
 
     $("#search-btn").on("click", function () {
 
         city = $("#search-city").val();
 
-        $("#dashboard").html('');
-        $("#5-day").html('');
+        // $("#dashboard").html('');
+        // $("#5-day").html('');
 
         getWeatherdata(city);
 
     });
 
     function getWeatherdata(city) {
+
+        $("#dashboard").html('');
+        $("#5-day").html('');
 
         queryURL1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
 
@@ -67,20 +97,26 @@ $(document).ready(function () {
 
             $("#dashboard").append(hCity, weatherIcon, pTemp, pHumid, pWind);
 
-            var cityButton = $("<button>").text(city).addClass("city-button");
-            $("#buttons").append(cityButton);
-
             lat = response.coord.lat;
             lon = response.coord.lon;
 
-            cityNum++;
-
-            localStorage.setItem("City " + cityNum, city);
             localStorage.setItem("last-city", city);
+
+            if ((localStorage.getItem(cityNum - 1) !== city) && (localStorage.getItem(cityNum - 2) !== city) && (localStorage.getItem(cityNum - 3) !== city)) {
+
+                localStorage.setItem(cityNum, city);
+
+                cityNum++;
+
+                var cityButton = $("<button>").text(city).addClass("city-button");
+                $("#buttons").append(cityButton);
+
+            };
 
             getUVdaily(lat, lon);
 
-        });
+        })
+        .fail(function(error) {alert("Sorry! We couldn't find that city. Please try again.")});
 
     };
 
@@ -101,7 +137,7 @@ $(document).ready(function () {
 
             const uvIndex = response.current.uvi
 
-            const pUV = $("<p>").text("UV Index: " + uvIndex)
+            const pUV = $("<p><span>").text("UV Index: " + uvIndex)
             fiveDay = response.daily
             forecastText = $("<h3>").text("5-Day Weather Forecast:")
 
@@ -124,13 +160,13 @@ $(document).ready(function () {
 
             };
 
-            // if (uvIndex < 4) {
-            //     pUV.addClass("favUV")
-            // } else if (uvIndex > 5) {
-            //     pUV.addClass("unfavUV")
-            // } else {
-            //     pUV.addClass(modUV)
-            // };
+            if (uvIndex < 4) {
+                pUV.addClass("favUV")
+            } else if (uvIndex > 5) {
+                pUV.addClass("unfavUV")
+            } else {
+                pUV.addClass("modUV")
+            };
 
 
         });

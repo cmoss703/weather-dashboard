@@ -44,15 +44,18 @@ header {
 }
 
 .favUV {
-    background-color: green;
+    background-color: rgb(59, 206, 59);
+    display: inline-flex;
 }
 
 .unfavUV {
-    background-color: red;
+    background-color: rgb(212, 57, 57);
+    display: inline-flex;
 }
 
 .modUV {
     background-color: yellow;
+    display: inline-flex;
 }
 
 .day-col {
@@ -62,6 +65,9 @@ header {
 }
 
 .city-button {
-    background-color: whitesmoke;
+    background-color: rgb(255, 255, 255);
     width: 130px;
+    border: rgb(0, 0, 0);
+    border-width: 1px;
+    text-transform: capitalize;
 }
