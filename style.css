@@ -7,7 +7,7 @@
 
 #dashboard {
     padding-top: 30px;
-    left: 20px
+    margin-left: 20px
 }
 
 #whats-weather {
@@ -53,4 +53,10 @@ header {
 
 .modUV {
     background-color: yellow;
+}
+
+.day-col {
+    width: 150px;
+    background-color: rgb(0, 132, 255);
+    color: cornsilk;
 }

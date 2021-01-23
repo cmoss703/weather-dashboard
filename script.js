@@ -9,11 +9,22 @@ $(document).ready(function () {
     }, 1000);
 
     var city;
+    var cityNum = 0;
     var lat;
     var lon;
     const APIkey = "9a01a6d9d70a31597772c3b431a80849"
 
-    // var lastSearch = localStorage.getItem("lastCity");
+    function getLast(city) {
+
+        var lastSearch = localStorage.getItem("last-city");
+
+        city = lastSearch;
+
+        getWeatherdata(city)
+
+    };
+
+    getLast(city);
 
     // function savedCities() {
 
@@ -24,15 +35,16 @@ $(document).ready(function () {
 
     $("#search-btn").on("click", function () {
 
-        getWeatherdata();
+        city = $("#search-city").val();
+
+        $("#dashboard").html('');
+        $("#5-day").html('');
+
+        getWeatherdata(city);
 
     });
 
-    function getWeatherdata() {
-
-        // event.preventDefault();
-
-        city = $("#search-city").val();
+    function getWeatherdata(city) {
 
         queryURL1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
 
@@ -54,15 +66,17 @@ $(document).ready(function () {
             pWind = $("<p>").text("Wind Speed: " + response.wind.speed + " MPH");
 
             $("#dashboard").append(hCity, weatherIcon, pTemp, pHumid, pWind);
-            $("#city-bar").append(city);
+
+            var cityButton = $("<button>").text(city);
+            $("#buttons").append(cityButton);
 
             lat = response.coord.lat;
             lon = response.coord.lon;
 
-            localStorage.setItem("City " + city, city)
+            cityNum++;
 
-            // localStorage.setItem("lat " + city, lat);
-            // localStorage.setItem("lon " + city, lon);
+            localStorage.setItem("City " + cityNum, city);
+            localStorage.setItem("last-city", city);
 
             getUVdaily(lat, lon);
 
@@ -72,15 +86,10 @@ $(document).ready(function () {
 
     function getUVdaily(lat, lon) {
 
-        // event.preventDefault();
-
-        // lat = localStorage.getItem("lat " + city);
-        // lon = localStorage.getItem("lon " + city);
         console.log("Lat = " + lat + " & Lon = " + lon);
 
         queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey;
 
-        console.log(city);
         console.log(queryURL2);
 
         $.ajax({
@@ -100,13 +109,17 @@ $(document).ready(function () {
             for (var i = 0; i < 5; i++) {
 
                 const dayColumn = $("<div>").addClass("col-md-2")
-                    dayCard = $("<div>").addClass("card")
-                    dayCardbody = $("<div>").addClass("card-body").html(response.daily[i])
-                    date = $("<p>").text(moment().add(i+1, 'days').format('L'));
+                dayCard = $("<div>").addClass("card day-col")
+                dayCardbody = $("<div>").addClass("card-body").html(response.daily[i])
+                date = $("<p>").text(moment().add(i + 1, 'days').format('l'))
+                iconDaily = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png")
+                tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32
+                tempDaily = $("<p>").text("Temp: " + tempF.toFixed(0) + "\u00B0F")
+                humidDay = $("<p>").text("Humidity: " + response.daily[i].humidity + "%")
 
-                dayColumn.append(dayCard.append(dayCardbody.append(date)));
-                $(".5-day").append(dayColumn);
-            
+                dayColumn.append(dayCard.append(dayCardbody.append(date, iconDaily, tempDaily, humidDay)));
+                $("#5-day").append(dayColumn);
+
             };
 
             // if (uvIndex < 4) {
@@ -122,11 +135,7 @@ $(document).ready(function () {
 
     };
 
-
-
-    // figure out how to add icons to forecast
+    // figure out how to colorize only the UV index number
     // save recent cities to local storage and call them when page reloads
-
-
 
 })

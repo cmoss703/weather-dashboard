@@ -15,8 +15,8 @@
 
     <div class="container">
         <header>
-            <h1 class="col-sm-12" id="whats-weather">Do you want to know about the weather?</h1>
-            <h2 class="col-sm-12 center" id="current-day"></h2>
+            <h1 class="col-md-12" id="whats-weather">Do you want to know about the weather?</h1>
+            <h2 class="col-md-12 center" id="current-day"></h2>
         </header>
         <div class="row main-grid">
             <div class="col-md-2" id="city-bar">
@@ -25,13 +25,19 @@
 
                     <input type="text" placeholder="ex: Austin" id="search-city">
                     <button id="search-btn" class="btn btn-primary fas fa-search"></button>
+                    
                 </div>
-                <div id="row saved-cities"></div>
+                <br>
+                <div id="row">
+                    <div class="col-md-2" id="buttons"></div>
+                </div>
             </div>
-            <div class="col-md-10" >
+            <div class="col-md-10" id="weather-data" >
                 <div class="row"></div>
-                    <div class="col-md-8" id="dashboard"></div>
-                <div class="row 5-day"></div>
+                    <div class="col-md-8">
+                        <div id="dashboard"></div>
+                    </div>
+                <div class="row" id="5-day"></div>
             </div>
 
         </div>
