@@ -76,7 +76,7 @@ $(document).ready(function () {
         $("#dashboard").html('');
         $("#5-day").html('');
 
-        queryURL1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
+        queryURL1 = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey;
 
         console.log(city);
         console.log(queryURL1);
@@ -88,7 +88,7 @@ $(document).ready(function () {
             console.log(response);
 
             const pToday = moment().format('L')
-            weatherIcon = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
+            weatherIcon = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
             hCity = $("<h2>").text(response.name + " (" + pToday + ")")
             tempF = (response.main.temp - 273.15) * 1.80 + 32
             pTemp = $("<p>").text("Temperature: " + tempF.toFixed(0) + " \u00B0F")
